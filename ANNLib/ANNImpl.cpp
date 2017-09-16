@@ -16,6 +16,7 @@ namespace ANN
         {
             this->configuration = configuration;
             this->activation_type = activation_type;
+            this->scale = 1;
         }
 
     public:
