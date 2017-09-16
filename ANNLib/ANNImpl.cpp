@@ -39,3 +39,8 @@ std::shared_ptr<ANN::NeuralNetwork> ANN::CreateNeuralNetwork(
 {
     return std::make_shared<ANN::BackPropagationNetwork>(configuration, activation_type);
 }
+
+std::string ANN::BackPropagationNetwork::GetType()
+{
+    return "Back Propagation Network by Vasilevsky Alexander";
+}
