@@ -25,7 +25,7 @@ int main()
 
     auto network = ANN::CreateNeuralNetwork(config);
 
-    network->MakeTrain(input_data, output_data);
+    network->MakeTrain(input_data, output_data, 100000, 0.1, 0.1, true);
 
     cout << "network type information:" << endl;
     cout << network->GetType() << endl;
