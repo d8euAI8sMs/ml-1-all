@@ -130,7 +130,7 @@ void ANN::BackPropagationNetwork::BackwardPropagate(std::vector<float> & input,
     std::vector < float > in = sigma;
     std::vector < float > out;
 
-    for (size_t i = weights.size() - 1; --i > 0;) // layers
+    for (size_t i = weights.size() - 1; i-- > 0;) // layers
     {
         out.resize(weights[i].size());
         for (size_t j = 0; j < weights[i].size(); ++j) // neurons in i-th layer
