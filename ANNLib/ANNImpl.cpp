@@ -218,6 +218,8 @@ float ANN::BackPropagationNetwork::MakeTrain
     } while ((err > eps) && (iterations < max_iters));
 
     is_trained = true;
+    
+    std::cout << iterations << ": " << err << std::endl;
 
     return err;
 }
