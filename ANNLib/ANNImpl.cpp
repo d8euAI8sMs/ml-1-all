@@ -219,7 +219,10 @@ float ANN::BackPropagationNetwork::MakeTrain
 
     is_trained = true;
     
-    std::cout << iterations << ": " << err << std::endl;
+    if (std_dump)
+    {
+        std::cout << iterations << ": " << err << std::endl;
+    }
 
     return err;
 }
