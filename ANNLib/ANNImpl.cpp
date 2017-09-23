@@ -38,10 +38,7 @@ namespace ANN
 
         /**
          * Performs forward data propagation and fills
-         * the `per_layer_input` with per-layer input data.
-         * The last element of `per_layer_input` is the network
-         * "early" output (to which the activation function
-         * must be applied).
+         * the `per_layer_output` with per-layer output data.
          * 
          * @param input            The network input data
          * @param per_layer_output The per-layer output data
