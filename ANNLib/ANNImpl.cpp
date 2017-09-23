@@ -17,6 +17,10 @@ namespace ANN
 	        NeuralNetwork::ActivationType activation_type)
         {
             this->configuration = configuration;
+            /**
+             *  Additional initialization for the bias neurons and their weights
+             */
+            for (size_t i = 0; i < this->configuration.size(); ++i) ++this->configuration[i];
             this->activation_type = activation_type;
             this->scale = 1;
         }
@@ -71,7 +75,7 @@ std::shared_ptr<ANN::NeuralNetwork> ANN::CreateNeuralNetwork(
 
 std::string ANN::BackPropagationNetwork::GetType()
 {
-    return "Back Propagation Network by Vasilevsky Alexander";
+    return "Back Propagation Network With Neuron Biases by Vasilevsky Alexander";
 }
 
 std::vector<float> ANN::BackPropagationNetwork::Predict(std::vector<float> & input)
@@ -80,10 +84,10 @@ std::vector<float> ANN::BackPropagationNetwork::Predict(std::vector<float> & inp
     std::vector < float > out;
     for (size_t i = 0; i < weights.size(); ++i) // layers
     {
-        out.resize(weights[i].size());
-        for (size_t j = 0; j < weights[i].size(); ++j) // neurons in i-th layer
+        out.resize(weights[i].size() - 1);
+        for (size_t j = 0; j < weights[i].size() - 1; ++j) // neurons in i-th layer
         {
-            float neuron_input = 0;
+            float neuron_input = weights[i][j][in.size()];
             for (size_t k = 0; k < in.size(); ++k) // (i-1)-th layer output
             {
                 neuron_input += in[k] * weights[i][j][k];
@@ -103,11 +107,11 @@ void ANN::BackPropagationNetwork::ForwardPropagate(std::vector<float> & input,
 
     for (size_t i = 0; i < weights.size(); ++i) // layers
     {
-        out.resize(weights[i].size());
-        per_layer_output[i].resize(weights[i].size());
-        for (size_t j = 0; j < weights[i].size(); ++j) // neurons in i-th layer
+        out.resize(weights[i].size() - 1);
+        per_layer_output[i].resize(weights[i].size() - 1);
+        for (size_t j = 0; j < weights[i].size() - 1; ++j) // neurons in i-th layer
         {
-            float neuron_input = 0;
+            float neuron_input = weights[i][j][in.size()];
             for (size_t k = 0; k < in.size(); ++k) // (i-1)-th layer output
             {
                 neuron_input += in[k] * weights[i][j][k];
@@ -129,8 +133,8 @@ void ANN::BackPropagationNetwork::BackwardPropagate(std::vector<float> & input,
 
     for (size_t i = weights.size() - 1; i-- > 0;) // layers
     {
-        out.resize(weights[i].size());
-        for (size_t j = 0; j < weights[i].size(); ++j) // neurons in i-th layer
+        out.resize(weights[i].size() - 1);
+        for (size_t j = 0; j < weights[i].size() - 1; ++j) // neurons in i-th layer
         {
             float neuron_input = 0;
             for (size_t k = 0; k < in.size(); ++k) // (i+1)-th layer output
@@ -142,10 +146,11 @@ void ANN::BackPropagationNetwork::BackwardPropagate(std::vector<float> & input,
         }
         for (size_t k = 0; k < in.size(); ++k) // (i+1)-th layer output
         {
-            for (size_t j = 0; j < weights[i].size(); ++j) // neurons in i-th layer
+            for (size_t j = 0; j < weights[i].size() - 1; ++j) // neurons in i-th layer
             {
                 weights[i + 1][k][j] += speed * per_layer_output[i][j] * in[k];
             }
+            weights[i + 1][k][weights[i + 1][k].size() - 1] += speed * in[k];
         }
         in.swap(out);
     }
@@ -155,6 +160,7 @@ void ANN::BackPropagationNetwork::BackwardPropagate(std::vector<float> & input,
         {
             weights[0][k][j] += speed * input[j] * in[k];
         }
+        weights[0][k][weights[0][k].size() - 1] += speed * in[k];
     }
 }
 
@@ -175,9 +181,12 @@ float ANN::BackPropagationNetwork::MakeTrain
         for (size_t j = 0; j < weights[i].size(); ++j) // neurons
         {
             weights[i][j].resize(configuration[i]);
-            for (size_t k = 0; k < weights[i][j].size(); ++k)
+            if ((j + 1) != weights[i].size())
             {
-                weights[i][j][k] = (float)rand() / RAND_MAX;
+                for (size_t k = 0; k < weights[i][j].size(); ++k)
+                {
+                    weights[i][j][k] = (float)rand() / RAND_MAX;
+                }
             }
         }
     }
