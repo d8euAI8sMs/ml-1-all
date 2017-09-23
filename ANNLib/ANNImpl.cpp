@@ -43,24 +43,24 @@ namespace ANN
          * "early" output (to which the activation function
          * must be applied).
          * 
-         * @param input           The network input data
-         * @param per_layer_input The per-layer input data
+         * @param input            The network input data
+         * @param per_layer_output The per-layer output data
          */
         void ForwardPropagate(std::vector < float > & input,
-                              std::vector < std::vector < float > > & per_layer_input);
+                              std::vector < std::vector < float > > & per_layer_output);
 
         /**
          * Performs backward error propagation and weight
          * matrix correction.
          * 
-         * @param input           The network input
-         * @param sigma           The error obtained from the output layer
-         * @param per_layer_input The per-layer input data
-         * @param speed           The training speed parameter
+         * @param input            The network input
+         * @param sigma            The error obtained from the output layer
+         * @param per_layer_output The per-layer output data
+         * @param speed            The training speed parameter
          */
         void BackwardPropagate(std::vector<float> & input,
                                std::vector<float> & sigma,
-                               std::vector < std::vector < float > > & per_layer_input,
+                               std::vector < std::vector < float > > & per_layer_output,
                                float speed);
     };
 }
@@ -99,7 +99,7 @@ std::vector<float> ANN::BackPropagationNetwork::Predict(std::vector<float> & inp
 }
 
 void ANN::BackPropagationNetwork::ForwardPropagate(std::vector<float> & input,
-                                                   std::vector < std::vector < float > > & per_layer_input)
+                                                   std::vector < std::vector < float > > & per_layer_output)
 {
     std::vector < float > in = input;
     std::vector < float > out;
@@ -107,7 +107,7 @@ void ANN::BackPropagationNetwork::ForwardPropagate(std::vector<float> & input,
     for (size_t i = 0; i < weights.size(); ++i) // layers
     {
         out.resize(weights[i].size());
-        per_layer_input[i].resize(weights[i].size());
+        per_layer_output[i].resize(weights[i].size());
         for (size_t j = 0; j < weights[i].size(); ++j) // neurons in i-th layer
         {
             float neuron_input = 0;
@@ -115,8 +115,8 @@ void ANN::BackPropagationNetwork::ForwardPropagate(std::vector<float> & input,
             {
                 neuron_input += in[k] * weights[i][j][k];
             }
-            per_layer_input[i][j] = neuron_input;
-            out[j] = Activation(neuron_input);
+            per_layer_output[i][j] = Activation(neuron_input);
+            out[j] = per_layer_output[i][j];
         }
         in.swap(out);
     }
@@ -124,7 +124,7 @@ void ANN::BackPropagationNetwork::ForwardPropagate(std::vector<float> & input,
 
 void ANN::BackPropagationNetwork::BackwardPropagate(std::vector<float> & input,
                                                     std::vector<float> & sigma,
-                                                    std::vector < std::vector < float > > & per_layer_input,
+                                                    std::vector < std::vector < float > > & per_layer_output,
                                                     float speed)
 {
     std::vector < float > in = sigma;
@@ -140,14 +140,14 @@ void ANN::BackPropagationNetwork::BackwardPropagate(std::vector<float> & input,
             {
                 neuron_input += in[k] * weights[i + 1][k][j];
             }
-            neuron_input *= ActivationDerivative(per_layer_input[i][j]);
+            neuron_input *= ActivationDerivative(per_layer_output[i][j]);
             out[j] = neuron_input;
         }
         for (size_t k = 0; k < in.size(); ++k) // (i+1)-th layer output
         {
             for (size_t j = 0; j < weights[i].size(); ++j) // neurons in i-th layer
             {
-                weights[i + 1][k][j] += speed * Activation(per_layer_input[i][j]) * in[k];
+                weights[i + 1][k][j] += speed * per_layer_output[i][j] * in[k];
             }
         }
         in.swap(out);
@@ -193,22 +193,22 @@ float ANN::BackPropagationNetwork::MakeTrain
         err = 0;
         for (size_t e = 0; e < inputs.size(); ++e) // for all data set
         {
-            std::vector < std::vector < float > > layer_inputs(weights.size());
+            std::vector < std::vector < float > > layer_outputs(weights.size());
 
-            ForwardPropagate(inputs[e], layer_inputs);
+            ForwardPropagate(inputs[e], layer_outputs);
 
-            std::vector < float > & raw_output = layer_inputs.back();
+            std::vector < float > & output = layer_outputs.back();
 
-            std::vector < float > sigma(raw_output.size());
+            std::vector < float > sigma(output.size());
 
-            for (size_t el = 0; el < raw_output.size(); ++el)
+            for (size_t el = 0; el < output.size(); ++el)
             {
-                float diff = outputs[e][el] - Activation(raw_output[el]);
+                float diff = outputs[e][el] - output[el];
                 err += diff * diff;
-                sigma[el] = diff * ActivationDerivative(raw_output[el]);
+                sigma[el] = diff * ActivationDerivative(output[el]);
             }
 
-            BackwardPropagate(inputs[e], sigma, layer_inputs, speed);
+            BackwardPropagate(inputs[e], sigma, layer_outputs, speed);
         }
         if (std_dump && ((iterations % (max_iters / 100)) == 0))
         {
