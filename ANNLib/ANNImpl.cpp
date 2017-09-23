@@ -180,7 +180,7 @@ float ANN::BackPropagationNetwork::MakeTrain
             weights[i][j].resize(configuration[i]);
             for (size_t k = 0; k < weights[i][j].size(); ++k)
             {
-                weights[i][j][k] = (float)rand() / RAND_MAX - 0.5f;
+                weights[i][j][k] = (float)rand() / RAND_MAX;
             }
         }
     }
