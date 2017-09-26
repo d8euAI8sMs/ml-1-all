@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BlobProcessorImpl.h" />
     <ClInclude Include="ComplexMoments.h" />
     <ClInclude Include="ExportMacro.h" />
     <ClInclude Include="FeatureExtraction.h" />
@@ -83,6 +84,7 @@
     <ClInclude Include="RadialFunctions.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BlobProcessorImpl.cpp" />
     <ClCompile Include="ComplexMoments.cpp" />
     <ClCompile Include="FeatureExtraction.cpp" />
     <ClCompile Include="PolynomialManager.cpp" />

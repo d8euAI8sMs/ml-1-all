@@ -36,6 +36,9 @@
     <ClInclude Include="PolynomialManagerImpl.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="BlobProcessorImpl.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PolynomialManager.cpp">
@@ -51,6 +54,9 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="PolynomialManagerImpl.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="BlobProcessorImpl.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
