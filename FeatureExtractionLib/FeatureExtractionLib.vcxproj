@@ -79,12 +79,14 @@
     <ClInclude Include="FeatureExtraction.h" />
     <ClInclude Include="IBlobProcessor.h" />
     <ClInclude Include="PolynomialManager.h" />
+    <ClInclude Include="PolynomialManagerImpl.h" />
     <ClInclude Include="RadialFunctions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ComplexMoments.cpp" />
     <ClCompile Include="FeatureExtraction.cpp" />
     <ClCompile Include="PolynomialManager.cpp" />
+    <ClCompile Include="PolynomialManagerImpl.cpp" />
     <ClCompile Include="RadialFunctions.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
