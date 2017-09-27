@@ -3,6 +3,8 @@
 
 #define M_PI 3.1415926535897932
 
+#include <limits>
+
 std::string fe::PolynomialManagerImpl::GetType()
 {
     return "Walsh Polynomial Manager by Alexander Vasilevsky";
@@ -38,6 +40,62 @@ void fe::PolynomialManagerImpl::InitBasis(int n_max, int diameter)
                     color_im = sine;
                 }
             }
+        }
+    }
+}
+
+void fe::PolynomialManagerImpl::Decompose(cv::Mat blob, ComplexMoments & decomposition)
+{
+    size_t basis_mat_count = 0;
+    for (size_t i = 0; i < this->polynomials.size(); ++i)
+    {
+        for (size_t j = 0; j < this->polynomials[i].size(); ++j)
+        {
+            ++basis_mat_count;
+        }
+    }
+    decomposition.re = cv::Mat(1, basis_mat_count, CV_64FC1);
+    decomposition.im = cv::Mat(1, basis_mat_count, CV_64FC1);
+
+    cv::Mat other;
+    blob.convertTo(other, CV_64FC1);
+
+    // convert from 0..255 to -1..+1
+    other /= 255.0 / 2.0;
+    other -= 1.0;
+
+    size_t basis_idx = 0;
+    for (size_t i = 0; i < this->polynomials.size(); ++i)
+    {
+        for (size_t j = 0; j < this->polynomials[i].size(); ++j)
+        {
+            double base_norm_re = this->polynomials[i][j].first.dot(this->polynomials[i][j].first);
+            double base_norm_im = this->polynomials[i][j].second.dot(this->polynomials[i][j].second);
+            if (abs(base_norm_re) > std::numeric_limits<double>::epsilon())
+            {
+                decomposition.re.at<double>(0, basis_idx) = other.dot(this->polynomials[i][j].first) / base_norm_re;
+            }
+            if (abs(base_norm_im) > std::numeric_limits<double>::epsilon())
+            {
+                decomposition.im.at<double>(0, basis_idx) = other.dot(this->polynomials[i][j].second) / base_norm_im;
+            }
+            ++basis_idx;
+        }
+    }
+}
+
+void fe::PolynomialManagerImpl::Recovery(ComplexMoments & decomposition, cv::Mat & recovery)
+{
+    recovery = cv::Mat(this->polynomials[0][0].first.rows, this->polynomials[0][0].first.cols, CV_64FC1);
+    recovery.setTo(cv::Scalar(0));
+    size_t basis_idx = 0;
+    for (size_t i = 0; i < this->polynomials.size(); ++i)
+    {
+        for (size_t j = 0; j < this->polynomials[i].size(); ++j)
+        {
+            recovery += this->polynomials[i][j].first * decomposition.re.at<double>(basis_idx)
+                      + this->polynomials[i][j].second * decomposition.im.at<double>(basis_idx);
+            ++basis_idx;
         }
     }
 }
