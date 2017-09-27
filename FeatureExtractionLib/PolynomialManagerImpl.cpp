@@ -54,8 +54,8 @@ void fe::PolynomialManagerImpl::Decompose(cv::Mat blob, ComplexMoments & decompo
             ++basis_mat_count;
         }
     }
-    decomposition.re = cv::Mat(1, basis_mat_count, CV_64FC1);
-    decomposition.im = cv::Mat(1, basis_mat_count, CV_64FC1);
+    decomposition.re = cv::Mat::zeros(cv::Size(1, basis_mat_count), CV_64FC1);
+    decomposition.im = cv::Mat::zeros(cv::Size(1, basis_mat_count), CV_64FC1);
 
     cv::Mat other;
     blob.convertTo(other, CV_64FC1, 2.0 / 255.0, -1.0);
