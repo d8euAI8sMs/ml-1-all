@@ -98,7 +98,7 @@ void fe::BlobProcessorImpl::NormalizeBlobs
         // blur the image in case of downscale to filter out higher harmonics
         if (side < effective_radius * 2)
         {
-            cv::GaussianBlur(pre_scale, blured, cv::Size(), 1.0 / 4.0 * effective_radius * effective_radius / (side / 2.0) / (side / 2.0));
+            cv::GaussianBlur(pre_scale, blured, cv::Size(), 1.0 / 2.0 * effective_radius * effective_radius / (side / 2.0) / (side / 2.0));
             cv::resize(blured, scaled, cv::Size(side, side));
         }
         else
