@@ -76,13 +76,14 @@ void fe::BlobProcessorImpl::NormalizeBlobs
     cv::Point2f mass_center;
     double effective_radius;
     double theta;
-    cv::Mat pre_scale;
-    cv::Mat blured;
-    cv::Mat scaled;
     int start_row, end_row;
     int start_col, end_col;
     for (size_t i = 0; i < blobs.size(); ++i)
     {
+        cv::Mat pre_scale;
+        cv::Mat blured;
+        cv::Mat scaled;
+
         GetMoments(blobs[i], mass_center, effective_radius, theta);
 
         pre_scale = cv::Mat::zeros(std::ceil(effective_radius) * 2,
