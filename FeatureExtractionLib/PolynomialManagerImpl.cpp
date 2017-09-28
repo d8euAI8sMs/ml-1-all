@@ -69,11 +69,11 @@ void fe::PolynomialManagerImpl::Decompose(cv::Mat blob, ComplexMoments & decompo
             double base_norm_im = this->polynomials[i][j].second.dot(this->polynomials[i][j].second);
             if (abs(base_norm_re) > std::numeric_limits<double>::epsilon())
             {
-                decomposition.re.at<double>(0, basis_idx) = other.dot(this->polynomials[i][j].first) / base_norm_re;
+                decomposition.re.at<double>(basis_idx) = other.dot(this->polynomials[i][j].first) / base_norm_re;
             }
             if (abs(base_norm_im) > std::numeric_limits<double>::epsilon())
             {
-                decomposition.im.at<double>(0, basis_idx) = other.dot(this->polynomials[i][j].second) / base_norm_im;
+                decomposition.im.at<double>(basis_idx) = other.dot(this->polynomials[i][j].second) / base_norm_im;
             }
             ++basis_idx;
         }
