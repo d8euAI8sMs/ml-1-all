@@ -62,7 +62,7 @@ static void GetMoments(cv::Mat & blob,
     radius_dispersion -= radius_mean * radius_mean * m00;
     radius_dispersion /= m00;
     effective_radius = radius_mean + 3.0 /* 1..3 */ * std::sqrt(radius_dispersion);
-    theta = std::atan2(2 * m11, m20 - m02) / 2.0;
+    theta = std::atan2(2 * m11, m20 - m02) / 2.0 * 180.0 / M_PI;
 }
 
 void fe::BlobProcessorImpl::NormalizeBlobs
@@ -107,15 +107,7 @@ void fe::BlobProcessorImpl::NormalizeBlobs
             cv::resize(pre_scale, scaled, cv::Size(side, side));
         }
 
-        // rotate the image
-        if (std::abs(theta) > (M_PI / 100.0))
-        {
-            cv::Mat rot_mat = cv::getRotationMatrix2D(cv::Point2f(side / 2.0, side / 2.0), theta, 1.0);
-            cv::warpAffine(scaled, normalized_blobs[i], rot_mat, cv::Size(side, side));
-        }
-        else // do nothing if theta is too small
-        {
-            normalized_blobs[i] = scaled;
-        }
+        cv::Mat rot_mat = cv::getRotationMatrix2D(cv::Point2f(side / 2.0, side / 2.0), - theta, 1.0);
+        cv::warpAffine(scaled, normalized_blobs[i], rot_mat, cv::Size(side, side));
     }
 }
