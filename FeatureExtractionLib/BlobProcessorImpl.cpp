@@ -109,5 +109,23 @@ void fe::BlobProcessorImpl::NormalizeBlobs
 
         cv::Mat rot_mat = cv::getRotationMatrix2D(cv::Point2f(side / 2.0, side / 2.0), - theta, 1.0);
         cv::warpAffine(scaled, normalized_blobs[i], rot_mat, cv::Size(side, side));
+
+        cv::Mat histogram = cv::Mat::zeros(1, side, CV_64FC1);
+        size_t max_idx = 0;
+        for (size_t r = 0; r < normalized_blobs[i].rows; ++r)
+        {
+            for (size_t c = 0; c < normalized_blobs[i].cols; ++c)
+            {
+                histogram.at<double>(r) += normalized_blobs[i].at<uchar>(c, r) / 255.0;
+            }
+            if (histogram.at<double>(r) > histogram.at<double>(max_idx))
+            {
+                max_idx = r;
+            }
+        }
+        if (max_idx < (side / 2.0))
+        {
+            cv::flip(normalized_blobs[i], normalized_blobs[i], -1);
+        }
     }
 }
