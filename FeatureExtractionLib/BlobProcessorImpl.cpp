@@ -38,7 +38,7 @@ static void GetMoments(cv::Mat & blob,
     {
         for (size_t c = 0; c < blob.cols; ++c)
         {
-            normalized_color = blob.at<uchar>(c, r) / 255.0;
+            normalized_color = blob.at<uchar>(cv::Point(c, r)) / 255.0;
             m00 += normalized_color;
             m10 += c * normalized_color;
             m01 += r * normalized_color;
@@ -49,7 +49,7 @@ static void GetMoments(cv::Mat & blob,
     {
         for (size_t c = 0; c < blob.cols; ++c)
         {
-            normalized_color = blob.at<uchar>(c, r) / 255.0;
+            normalized_color = blob.at<uchar>(cv::Point(c, r)) / 255.0;
             x = c - mass_center.x; y = r - mass_center.y;
             radius_mean += std::sqrt(x * x + y * y) * normalized_color;
             radius_dispersion += (x * x + y * y) * normalized_color;
@@ -116,7 +116,7 @@ void fe::BlobProcessorImpl::NormalizeBlobs
         {
             for (size_t c = 0; c < normalized_blobs[i].cols; ++c)
             {
-                histogram.at<double>(r) += normalized_blobs[i].at<uchar>(c, r) / 255.0;
+                histogram.at<double>(r) += normalized_blobs[i].at<uchar>(cv::Point(c, r)) / 255.0;
             }
             if (histogram.at<double>(r) > histogram.at<double>(max_idx))
             {
