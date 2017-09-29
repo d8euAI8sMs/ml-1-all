@@ -16,8 +16,8 @@ void fe::PolynomialManagerImpl::InitBasis(int n_max, int diameter)
     this->polynomials.resize(n_max + 1);
     for (size_t n = 0; n <= n_max; ++n)
     {
-        this->polynomials[n].resize(n + 1);
-        for (size_t i = 0; i <= n; ++i)
+        this->polynomials[n].resize(n_max + 1);
+        for (size_t i = 0; i <= n_max; ++i)
         {
             this->polynomials[n][i] = std::make_pair(cv::Mat(diameter, diameter, CV_64FC1), cv::Mat(diameter, diameter, CV_64FC1));
             this->polynomials[n][i].first.setTo(cv::Scalar(0));
@@ -30,7 +30,7 @@ void fe::PolynomialManagerImpl::InitBasis(int n_max, int diameter)
             for (size_t th = 0; th < rot_count; ++th)
             {
                 double theta = 2 * th * M_PI / rot_count;
-                for (size_t i = 0; i <= n; ++i)
+                for (size_t i = 0; i <= n_max; ++i)
                 {
                     double sine = std::sin(theta * i) * radial;
                     double cosine = std::cos(theta * i) * radial;
