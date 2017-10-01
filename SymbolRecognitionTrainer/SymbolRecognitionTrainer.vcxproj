@@ -75,11 +75,13 @@
   <ItemGroup>
     <ClCompile Include="MomentsHelper.cpp" />
     <ClCompile Include="MomentsRecognizer.cpp" />
+    <ClCompile Include="MomentsRecognizerImpl.cpp" />
     <ClCompile Include="SymbolRecognitionTrainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MomentsHelper.h" />
     <ClInclude Include="MomentsRecognizer.h" />
+    <ClInclude Include="MomentsRecognizerImpl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
