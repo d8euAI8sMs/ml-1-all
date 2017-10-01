@@ -90,10 +90,34 @@ void fe::BlobProcessorImpl::NormalizeBlobs
                                    std::ceil(effective_radius) * 2,
                                    CV_8UC1);
 
-        blobs[i].copyTo
+        cv::Mat blob = blobs[i];
+        if (effective_radius < mass_center.x)
+        {
+            int delta = std::ceil(mass_center.x - effective_radius);
+            blob = blob.colRange(delta, blob.cols);
+            mass_center.x -= delta;
+        }
+        if (effective_radius < mass_center.y)
+        {
+            int delta = std::ceil(mass_center.y - effective_radius);
+            blob = blob.rowRange(delta, blob.rows);
+            mass_center.y -= delta;
+        }
+        if ((blob.cols - mass_center.x) > effective_radius)
+        {
+            int delta = std::ceil((blob.cols - mass_center.x) - effective_radius);
+            blob = blob.colRange(0, blob.cols - delta);
+        }
+        if ((blob.rows - mass_center.y) > effective_radius)
+        {
+            int delta = std::ceil((blob.rows - mass_center.y) - effective_radius);
+            blob = blob.rowRange(0, blob.rows - delta);
+        }
+
+        blob.copyTo
         (
-            pre_scale.colRange(effective_radius - mass_center.x, effective_radius - mass_center.x + blobs[i].cols)
-                     .rowRange(effective_radius - mass_center.y, effective_radius - mass_center.y + blobs[i].rows)
+            pre_scale.colRange(effective_radius - mass_center.x, effective_radius - mass_center.x + blob.cols)
+                     .rowRange(effective_radius - mass_center.y, effective_radius - mass_center.y + blob.rows)
         );
 
         // blur the image in case of downscale to filter out higher harmonics
