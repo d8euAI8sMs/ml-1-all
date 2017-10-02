@@ -20,7 +20,7 @@ static const string ground_data_moments = "..\\data\\ground_data_moments.dat";
 static const string test_data_moments   = "..\\data\\test_data_moment.dat";
 static const string cv_ground_data_moments = "..\\data\\cv_ground_data_moments.dat";
 static const string cv_test_data_moments   = "..\\data\\cv_test_data_moment.dat";
-static const string serialized_network  = "..\\data\\network.dat";
+static const string serialized_classifier  = "..\\data\\classifier.dat";
 
 void generateData()
 {
@@ -84,9 +84,9 @@ void generateData()
     else        cout << "failed" << endl;
 }
 
-void trainNetwork()
+void trainClassifier()
 {
-	cout << "===Train network!===" << endl;
+	cout << "===Train classifier!===" << endl;
 
     bool result;
 
@@ -100,37 +100,58 @@ void trainNetwork()
     if (result) cout << "success" << endl;
     else        cout << "failed" << endl;
 
-    vector < int > ann_config;
-    size_t num_of_hiddne_layers;
-    float ann_precision; float ann_speed;
-    size_t ann_max_iters;
+    string classifier_type;
 
-    cout << "  Train network... " << endl;
+    cout << "  Choose classifier type... " << endl;
+    cout << "    [input] Classifier type: [ann/knearest] ";
+    cin >> classifier_type;
+    cout << "    success" << endl;
 
-    cout << "    [input] Number of hidden layers: [N] ";
-    cin >> num_of_hiddne_layers;
-    ann_config.resize(num_of_hiddne_layers);
-
-    cout << "    [input] Number of neurons in each layer: [M1 M2 M3 ... MN] ";
-    for (size_t i = 0; i < num_of_hiddne_layers; ++i)
+    if ("ann" == classifier_type)
     {
-        cin >> ann_config[i];
+        vector < int > ann_config;
+        size_t num_of_hiddne_layers;
+        float ann_precision; float ann_speed;
+        size_t ann_max_iters;
+
+        cout << "  Train network... " << endl;
+
+        cout << "    [input] Number of hidden layers: [N] ";
+        cin >> num_of_hiddne_layers;
+        ann_config.resize(num_of_hiddne_layers);
+
+        cout << "    [input] Number of neurons in each layer: [M1 M2 M3 ... MN] ";
+        for (size_t i = 0; i < num_of_hiddne_layers; ++i)
+        {
+            cin >> ann_config[i];
+        }
+
+        cout << "    [input] Max iteration number and expected precision: [uint float] ";
+        cin >> ann_max_iters; cin >> ann_precision;
+
+        cout << "    [input] Training speed: [float] ";
+        cin >> ann_speed;
+
+        result = mr.Train(moments, ann_config, ann_max_iters, ann_precision, ann_speed);
     }
+    else
+    {
+        size_t max_k;
 
-    cout << "    [input] Max iteration number and expected precision: [uint float] ";
-    cin >> ann_max_iters; cin >> ann_precision;
+        cout << "  Train k-nearest... " << endl;
 
-    cout << "    [input] Training speed: [float] ";
-    cin >> ann_speed;
+        cout << "    [input] Max K: [N] ";
+        cin >> max_k;
 
-    result = mr.Train(moments, ann_config, ann_max_iters, ann_precision, ann_speed);
+        result = mr.TrainKNearest(moments, max_k);
+    }
 
     if (result) cout << "    success" << endl;
     else        cout << "    failed" << endl;
 
-    cout << "  Save network... ";
+    cout << "  Save classifier... ";
 
-    result = mr.Save(serialized_network);
+    result = mr.Save(serialized_classifier);
 
     if (result) cout << "success" << endl;
     else        cout << "failed" << endl;
@@ -145,9 +166,9 @@ void precisionTest()
     MomentsRecognizerImpl mr;
     map < string, vector < ComplexMoments > > moments;
 
-    cout << "  Read network... ";
+    cout << "  Read classifier... ";
 
-    result = mr.Read(serialized_network);
+    result = mr.Read(serialized_classifier);
 
     if (result) cout << "success" << endl;
     else        cout << "failed" << endl;
@@ -159,7 +180,7 @@ void precisionTest()
     if (result) cout << "success" << endl;
     else        cout << "failed" << endl;
 
-    cout << "  Perform precision test of network prediction results... ";
+    cout << "  Perform precision test of classifier prediction results... ";
 
     double precision = mr.PrecisionTest(moments);
 
@@ -182,9 +203,9 @@ void recognizeImage()
     auto bp = CreateBlobProcessor();
     auto pm = CreatePolynomialManager();
 
-    cout << "  Read network... ";
+    cout << "  Read classifier... ";
 
-    result = mr.Read(serialized_network);
+    result = mr.Read(serialized_classifier);
 
     if (result) cout << "success" << endl;
     else        cout << "failed" << endl;
@@ -309,26 +330,44 @@ void cvTest()
     size_t num_of_hiddne_layers;
     float ann_precision; float ann_speed;
     size_t ann_max_iters;
+    size_t max_k;
 
-    cout << "  Initialize network parameters... " << endl;
+    string classifier_type;
 
-    cout << "    [input] Number of hidden layers: [N] ";
-    cin >> num_of_hiddne_layers;
-    ann_config.resize(num_of_hiddne_layers);
-
-    cout << "    [input] Number of neurons in each layer: [M1 M2 M3 ... MN] ";
-    for (size_t i = 0; i < num_of_hiddne_layers; ++i)
-    {
-        cin >> ann_config[i];
-    }
-
-    cout << "    [input] Max iteration number and expected precision: [uint float] ";
-    cin >> ann_max_iters; cin >> ann_precision;
-
-    cout << "    [input] Training speed: [float] ";
-    cin >> ann_speed;
-
+    cout << "  Choose classifier type... " << endl;
+    cout << "    [input] Classifier type: [ann/knearest] ";
+    cin >> classifier_type;
     cout << "    success" << endl;
+
+    if ("ann" == classifier_type)
+    {
+        cout << "  Initialize network parameters... " << endl;
+
+        cout << "    [input] Number of hidden layers: [N] ";
+        cin >> num_of_hiddne_layers;
+        ann_config.resize(num_of_hiddne_layers);
+
+        cout << "    [input] Number of neurons in each layer: [M1 M2 M3 ... MN] ";
+        for (size_t i = 0; i < num_of_hiddne_layers; ++i)
+        {
+            cin >> ann_config[i];
+        }
+
+        cout << "    [input] Max iteration number and expected precision: [uint float] ";
+        cin >> ann_max_iters; cin >> ann_precision;
+
+        cout << "    [input] Training speed: [float] ";
+        cin >> ann_speed;
+
+        cout << "    success" << endl;
+    }
+    else
+    {
+        cout << "  Initialize k-nearest parameters... " << endl;
+
+        cout << "    [input] Max K: [N] ";
+        cin >> max_k;
+    }
 
     cout << "  Prepare for CV-test... " << endl;
     cout << "    [input] Number of partitions: [uint] ";
@@ -403,9 +442,18 @@ void cvTest()
         if (result) cout << "success" << endl;
         else        cout << "failed" << endl;
 
-        cout << "    Train network... ";
+        if ("ann" == classifier_type)
+        {
+            cout << "    Train network... ";
 
-        result = mr.Train(moments, ann_config, ann_max_iters, ann_precision, ann_speed);
+            result = mr.Train(moments, ann_config, ann_max_iters, ann_precision, ann_speed);
+        }
+        else
+        {
+            cout << "    Train k-nearest... ";
+
+            result = mr.TrainKNearest(moments, max_k);
+        }
 
         if (result) cout << "success" << endl;
         else        cout << "failed" << endl;
@@ -419,7 +467,7 @@ void cvTest()
         if (result) cout << "success" << endl;
         else        cout << "failed" << endl;
 
-        cout << "    Perform precision test of network prediction results... ";
+        cout << "    Perform precision test of classifier prediction results... ";
 
         precision = mr.PrecisionTest(moments);
         mean_precision += precision;
@@ -438,9 +486,18 @@ void cvTest()
         if (result) cout << "success" << endl;
         else        cout << "failed" << endl;
 
-        cout << "    Train network... ";
+        if ("ann" == classifier_type)
+        {
+            cout << "    Train network... ";
 
-        result = mr.Train(moments, ann_config, ann_max_iters, ann_precision, ann_speed);
+            result = mr.Train(moments, ann_config, ann_max_iters, ann_precision, ann_speed);
+        }
+        else
+        {
+            cout << "    Train k-nearest... ";
+
+            result = mr.TrainKNearest(moments, max_k);
+        }
 
         if (result) cout << "success" << endl;
         else        cout << "failed" << endl;
@@ -454,7 +511,7 @@ void cvTest()
         if (result) cout << "success" << endl;
         else        cout << "failed" << endl;
 
-        cout << "    Perform precision test of network prediction results... ";
+        cout << "    Perform precision test of classifier prediction results... ";
 
         precision = mr.PrecisionTest(moments);
         mean_precision += precision;
@@ -497,7 +554,7 @@ int main(int argc, char** argv)
 	{
 		cout << "===Enter next walues to do something:===" << endl;
 		cout << "  '1' - to generate data." << endl;
-		cout << "  '2' - to train network." << endl;
+		cout << "  '2' - to train classifier." << endl;
 		cout << "  '3' - to check recognizing precision." << endl;
 		cout << "  '4' - to recognize single image." << endl;
 		cout << "  '5' - to check recognition algorithm precision." << endl;
@@ -509,7 +566,7 @@ int main(int argc, char** argv)
 			generateData();
 		}
 		else if (key == "2") {
-			trainNetwork();
+			trainClassifier();
 		}
 		else if (key == "3") {
 			precisionTest();
