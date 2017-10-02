@@ -7,6 +7,19 @@ class MomentsRecognizerImpl : public MomentsRecognizer
 
 public:
 
+    enum class StatModel
+    {
+        ANN,
+        KNEAREST
+    };
+
+private:
+
+    cv::Ptr < cv::ml::KNearest > pKNearest;
+    StatModel statModel;
+
+public:
+
     MomentsRecognizerImpl()
     {
     }
@@ -29,4 +42,12 @@ public:
         int max_iters,
         float eps,
         float speed);
+
+    virtual std::string Recognize(fe::ComplexMoments & moments);
+
+    virtual bool Save(std::string filename);
+
+    virtual bool Read(std::string filename);
+
+    bool TrainKNearest(std::map<std::string, std::vector<fe::ComplexMoments>> moments, size_t max_k);
 };
