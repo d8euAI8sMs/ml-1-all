@@ -1,3 +1,5 @@
+#include "windows.h"
+
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 
@@ -233,7 +235,12 @@ void recognizeImage()
 
     for (size_t i = 0; i < blobs.size(); ++i)
     {
-        cout << mr.Recognize(moments[i]) << " ";
+        string recognition_resilt = mr.Recognize(moments[i]);
+        cout << recognition_resilt << " ";
+        Mat blob;
+        resize(nblobs[i], blob, cv::Size(200, 200));
+        imshow("Recognized as: " + recognition_resilt, blob);
+        waitKey(); destroyAllWindows();
     }
 
     cout << endl << "    success" << endl;
