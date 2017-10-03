@@ -84,14 +84,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ANNIndividual.cpp" />
     <ClCompile Include="Epoch.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="genetic_fraimwork.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ANNIndividual.h" />
     <ClInclude Include="Epoch.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="IIndividual.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ANNLib\ANNLib.vcxproj">
+      <Project>{c43879f6-1af6-4f03-994f-f3f7f83c4898}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
