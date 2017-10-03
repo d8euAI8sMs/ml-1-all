@@ -88,12 +88,14 @@
     <ClCompile Include="Epoch.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="genetic_fraimwork.cpp" />
+    <ClCompile Include="XORIndividual.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ANNIndividual.h" />
     <ClInclude Include="Epoch.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="IIndividual.h" />
+    <ClInclude Include="XORIndividual.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ANNLib\ANNLib.vcxproj">
