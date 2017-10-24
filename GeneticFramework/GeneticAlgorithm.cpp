@@ -1,5 +1,6 @@
 #include <algorithm>
 #include "GeneticAlgorithm.h"
+#include "Util.h"
 
 using namespace ga;
 using namespace std;
@@ -15,18 +16,12 @@ ga::GeneticAlgorithm::~GeneticAlgorithm()
 
 static pIIndividual Select(ga::pEpoch epoch, size_t total_points)
 {
-    float rnd;
-    for (;;)
-    {
-        for each (auto & p in epoch->population)
-        {
-            rnd = (float)rand() / RAND_MAX;
-            if (rnd * total_points < p.first)
-            {
-                return p.second;
-            }
-        }
-    }
+    return RandomSelect
+    (
+        epoch->population.begin(),
+        epoch->population.end(),
+        [total_points] (const decltype(epoch->population.begin()) & iter) { return (float)iter->first / total_points; }
+    )->second;
 }
 
 ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation_perc, double crossover_perc)
