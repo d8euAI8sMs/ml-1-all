@@ -13,7 +13,7 @@ ga::GeneticAlgorithm::~GeneticAlgorithm()
 {
 }
 
-static pIIndividual Setect(ga::pEpoch epoch, size_t total_points)
+static pIIndividual Select(ga::pEpoch epoch, size_t total_points)
 {
     float rnd;
     for (;;)
@@ -62,14 +62,14 @@ ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation
         pIIndividual x, y;
         do
         {
-            x = Setect(epoch, total_points); y = Setect(epoch, total_points);
+            x = Select(epoch, total_points); y = Select(epoch, total_points);
         } while (x != y);
         new_epoch->population.emplace_back(0, x->Crossover(y));
     }
 
     for (size_t i = 0; i < mutation; ++i)
     {
-        pIIndividual x = Setect(epoch, total_points);
+        pIIndividual x = Select(epoch, total_points);
         new_epoch->population.emplace_back(0, x->Mutation());
     }
 
