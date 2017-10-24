@@ -95,6 +95,7 @@
     <ClInclude Include="Epoch.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="IIndividual.h" />
+    <ClInclude Include="Util.h" />
     <ClInclude Include="XORIndividual.h" />
   </ItemGroup>
   <ItemGroup>
