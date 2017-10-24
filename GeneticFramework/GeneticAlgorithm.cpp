@@ -58,7 +58,7 @@ ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation
         do
         {
             x = Select(epoch, total_points); y = Select(epoch, total_points);
-        } while (x != y);
+        } while (x == y);
         new_epoch->population.emplace_back(0, x->Crossover(y));
     }
 
