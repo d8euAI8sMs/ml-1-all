@@ -87,18 +87,17 @@ ga::pIIndividual ga::ANNIndividual::Crossover(pIIndividual individual)
     ANNIndividual * self = (ANNIndividual *) clone.get();
     ANNIndividual * other = (ANNIndividual *) individual.get();
     size_t crossover_threshold = ((float)rand() / RAND_MAX) * total_num_of_weights;
-    size_t weight_idx = 0;
     for (size_t i = 0; i < weights.size(); ++i) // layers
     {
         for (size_t j = 0; j < weights[i].size(); ++j) // neurons
         {
             for (size_t k = 0; k < weights[i][j].size(); ++k)
             {
-                if (weight_idx > crossover_threshold)
-                {
-                    self->weights[i][j][k] = other->weights[i][j][k];
-                }
-                ++weight_idx;
+                // Intermediate recombination
+                // see Panchenko T.V. sec.2.4 p.19
+                float d = 0.25;
+                float alpha = ((float)rand() / RAND_MAX) * (2 * d + 1) - d;
+                self->weights[i][j][k] += alpha * (other->weights[i][j][k] - self->weights[i][j][k]);
             }
         }
     }
