@@ -31,6 +31,14 @@ namespace ga
             };
         }
 
+        static spare_fn_t make_inv_spare_fn()
+        {
+            return [] (double self_err, double other_err)
+            {
+                return std::make_pair(1 + (int)(100. / self_err), 1 + (int)(100. / other_err));
+            };
+        }
+
         static spare_fn_t make_logarithmic_spare_fn()
         {
             return [] (double self_err, double other_err)
