@@ -51,6 +51,23 @@ namespace ga
             };
         }
 
+        static spare_fn_t make_composite_spare_fn()
+        {
+            auto f1 = make_simple_spare_fn();
+            auto f2 = make_inv_spare_fn();
+            auto f3 = make_logarithmic_spare_fn();
+            return [f1, f2, f3] (double self_err, double other_err)
+            {
+                auto r1 = f1(self_err, other_err);
+                auto r2 = f2(self_err, other_err);
+                auto r3 = f3(self_err, other_err);
+                return std::make_pair < int, int > (
+                    r1.first * 1000 + r2.first + r3.first,
+                    r1.second * 1000 + r2.second + r3.second
+                );
+            };
+        }
+
         XORIndividual(std::shared_ptr < std::vector < std::vector < float > > > inputs,
                       std::shared_ptr < std::vector < std::vector < float > > > outputs,
                       spare_fn_t spare_fn)
