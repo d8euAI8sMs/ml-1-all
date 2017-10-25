@@ -33,11 +33,18 @@ ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation
 		return a.first > b.first;
 	});
 
+    double point_dispersion = 0;
     double total_points = 0;
     for each (auto & p in epoch->population)
     {
+        point_dispersion += (double)p.first * (double)p.first;
         total_points += p.first;
     }
+    point_dispersion /= epoch->population.size();
+    point_dispersion -= (total_points / epoch->population.size()) * (total_points / epoch->population.size());
+
+    // if all individuals are 'same', increase mutation rate
+    if (point_dispersion < 1e-6) mutation_perc *= 5;
 
     auto new_epoch = std::make_shared < Epoch > ();
 
