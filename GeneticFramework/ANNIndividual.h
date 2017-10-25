@@ -14,6 +14,7 @@ namespace ga
     private:
 
         size_t total_num_of_weights;
+        float avg_weight;
 
     public:
 

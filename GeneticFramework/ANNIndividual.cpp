@@ -13,6 +13,7 @@ ga::ANNIndividual::ANNIndividual(std::vector < int > configuration,
     this->is_trained = true;
     this->scale = 1;
     this->total_num_of_weights = 0;
+    this->avg_weight = 0;
 
     weights.resize(configuration.size() - 1);
     for (size_t i = 0; i < weights.size(); ++i) // layers
@@ -24,10 +25,12 @@ ga::ANNIndividual::ANNIndividual(std::vector < int > configuration,
             for (size_t k = 0; k < weights[i][j].size(); ++k)
             {
                 weights[i][j][k] = (float)rand() / RAND_MAX;
+                this->avg_weight += abs(weights[i][j][k]);
                 ++total_num_of_weights;
             }
         }
     }
+    this->avg_weight /= total_num_of_weights;
 }
 
 ga::ANNIndividual::ANNIndividual(const ANNIndividual & ref)
@@ -37,6 +40,7 @@ ga::ANNIndividual::ANNIndividual(const ANNIndividual & ref)
     this->is_trained = true;
     this->scale = 1;
     this->total_num_of_weights = 0;
+    this->avg_weight = 0;
 
     weights.resize(configuration.size() - 1);
     for (size_t i = 0; i < weights.size(); ++i) // layers
@@ -48,10 +52,12 @@ ga::ANNIndividual::ANNIndividual(const ANNIndividual & ref)
             for (size_t k = 0; k < weights[i][j].size(); ++k)
             {
                 weights[i][j][k] = ref.weights[i][j][k];
+                this->avg_weight += abs(weights[i][j][k]);
                 ++total_num_of_weights;
             }
         }
     }
+    this->avg_weight /= total_num_of_weights;
 }
 
 ga::pIIndividual ga::ANNIndividual::Mutation()
@@ -64,9 +70,11 @@ ga::pIIndividual ga::ANNIndividual::Mutation()
         {
             for (size_t k = 0; k < weights[i][j].size(); ++k)
             {
-                self->weights[i][j][k]
-                    += (((double) rand() / RAND_MAX) - 0.5) * self->weights[i][j][k]
-                    +  (((double) rand() / RAND_MAX) - 0.5);
+                if (RandomBool(0.05))
+                {
+                    self->weights[i][j][k]
+                        += (((float)rand() / RAND_MAX) * 2 * avg_weight - avg_weight) / 10;
+                }
             }
         }
     }
