@@ -48,15 +48,18 @@ ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation
 
     auto new_epoch = std::make_shared < Epoch > ();
 
+    size_t elite = std::ceil(epoch->population.size() * unchange_perc / 100);
+
     do
     {
         pIIndividual x = Select(epoch, total_points)
                    , y = nullptr;
-        if (RandomBool(unchange_perc / 100))
+        if (elite)
         {
             y = std::move(x);
             if (RandomBool(mutation_perc / 100)) y = y->Mutation();
             new_epoch->population.emplace_back(0, std::move(y));
+            --elite;
         }
         else if (RandomBool(crossover_perc / 100))
         {
