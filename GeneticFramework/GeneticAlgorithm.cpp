@@ -14,13 +14,13 @@ ga::GeneticAlgorithm::~GeneticAlgorithm()
 {
 }
 
-static pIIndividual Select(ga::pEpoch epoch, size_t total_points)
+static pIIndividual Select(ga::pEpoch epoch, double total_points)
 {
     return RandomSelect
     (
         epoch->population.begin(),
         epoch->population.end(),
-        [total_points] (const decltype(epoch->population.begin()) & iter) { return (float)iter->first / total_points; }
+        [total_points] (const decltype(epoch->population.begin()) & iter) { return (double)iter->first / total_points; }
     )->second;
 }
 
@@ -33,7 +33,7 @@ ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation
 		return a.first > b.first;
 	});
 
-    int total_points = 0;
+    double total_points = 0;
     for each (auto & p in epoch->population)
     {
         total_points += p.first;
