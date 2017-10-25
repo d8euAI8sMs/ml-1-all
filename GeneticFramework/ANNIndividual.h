@@ -19,7 +19,7 @@ namespace ga
     public:
 
         ANNIndividual(std::vector < int > configuration,
-                      ANN::NeuralNetwork::ActivationType activation_type);
+                      float max_weight);
 
         ANNIndividual(const ANNIndividual & ref);
 

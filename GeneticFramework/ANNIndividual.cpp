@@ -7,10 +7,10 @@
 //} 
 
 ga::ANNIndividual::ANNIndividual(std::vector < int > configuration,
-                                 ANN::NeuralNetwork::ActivationType activation_type)
+                                 float max_weight)
 {
     this->configuration = configuration;
-    this->activation_type = activation_type;
+    this->activation_type = BIPOLAR_SYGMOID;
     this->is_trained = true;
     this->scale = 1;
     this->total_num_of_weights = 0;
@@ -25,7 +25,7 @@ ga::ANNIndividual::ANNIndividual(std::vector < int > configuration,
             weights[i][j].resize(configuration[i]);
             for (size_t k = 0; k < weights[i][j].size(); ++k)
             {
-                weights[i][j][k] = (float)rand() / RAND_MAX;
+                weights[i][j][k] = (float)rand() / RAND_MAX * max_weight * 2 - max_weight;
                 this->avg_weight += abs(weights[i][j][k]);
                 ++total_num_of_weights;
             }
