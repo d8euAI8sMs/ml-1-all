@@ -34,7 +34,7 @@ void xor_demo()
     std::cin >> initial_size;
 
     std::string spare_fn_name;
-    std::cout << "[input] Spare function name: [bin/log/inv] ";
+    std::cout << "[input] Spare function name: [bin/log/inv/sum] ";
     std::cin >> spare_fn_name;
 
     XORIndividual::spare_fn_t spare_fn = XORIndividual::make_simple_spare_fn();
@@ -45,6 +45,10 @@ void xor_demo()
     else if ("inv" == spare_fn_name)
     {
         spare_fn = XORIndividual::make_inv_spare_fn();
+    }
+    else if ("sum" == spare_fn_name)
+    {
+        spare_fn = XORIndividual::make_composite_spare_fn();
     }
 
     GeneticAlgorithm a;
