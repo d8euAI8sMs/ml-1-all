@@ -2,6 +2,7 @@
 #include <string>
 #include "GeneticAlgorithm.h"
 #include "XORIndividual.h"
+#include "Util.h"
 
 using  namespace std;
 using namespace ga;
@@ -89,6 +90,11 @@ void xor_demo()
         std::cout << " Error: " << std::sqrt(err) << std::endl;
 
         a.epoch = new_epoch;
+
+        if (RandomBool(0.01))
+        {
+            a.epoch->population.emplace_back(0, std::make_shared < XORIndividual > (inputs, outputs, spare_fn));
+        }
     } while (err > eps * eps);
 }
 
