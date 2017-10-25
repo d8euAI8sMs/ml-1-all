@@ -33,10 +33,6 @@ ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation
 		return a.first > b.first;
 	});
 
-    int unchange = std::ceil(epoch->population.size() * unchange_perc / 100.0);
-    int mutation = std::ceil(epoch->population.size() * mutation_perc / 100.0);
-    int crossover = std::ceil(epoch->population.size() * crossover_perc / 100.0);
-
     int total_points = 0;
     for each (auto & p in epoch->population)
     {
@@ -45,28 +41,27 @@ ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation
 
     auto new_epoch = std::make_shared < Epoch > ();
 
-    new_epoch->population.reserve(unchange + mutation + crossover);
-
-    for (size_t i = 0; i < unchange; ++i)
+    do
     {
-        new_epoch->population.emplace_back(0, epoch->population[i].second->Clone());
-    }
-
-    for (size_t i = 0; i < crossover; ++i)
-    {
-        pIIndividual x, y;
-        do
+        pIIndividual x = Select(epoch, total_points)
+                   , y = nullptr;
+        if (RandomBool(unchange_perc / 100))
         {
-            x = Select(epoch, total_points); y = Select(epoch, total_points);
-        } while (x == y);
-        new_epoch->population.emplace_back(0, x->Crossover(y));
-    }
-
-    for (size_t i = 0; i < mutation; ++i)
-    {
-        pIIndividual x = Select(epoch, total_points);
-        new_epoch->population.emplace_back(0, x->Mutation());
-    }
+            y = std::move(x);
+            if (RandomBool(mutation_perc / 100)) y = y->Mutation();
+            new_epoch->population.emplace_back(0, std::move(y));
+        }
+        else if (RandomBool(crossover_perc / 100))
+        {
+            do
+            {
+                y = Select(epoch, total_points);
+            } while (x == y);
+            y = x->Crossover(std::move(y));
+            if (RandomBool(mutation_perc / 100)) y = y->Mutation();
+            new_epoch->population.emplace_back(0, std::move(y));
+        }
+    } while (new_epoch->population.size() < epoch->population.size());
 
     return (epoch = std::move(new_epoch));
 }
