@@ -73,6 +73,5 @@ ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation
         }
     } while (new_epoch->population.size() < epoch->population.size());
 
-    return (epoch = std::move(new_epoch));
+    return std::move(new_epoch);
 }
-

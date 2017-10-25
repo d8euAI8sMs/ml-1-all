@@ -61,12 +61,13 @@ void xor_demo()
     const double eps = 1e-3;
     double err = 0;
     size_t epoch = 0;
+    pEpoch new_epoch;
     do
     {
         err = 0;
 
         a.epoch->EpochBattle();
-        a.Selection(2.0 / a.epoch->population.size() * 100, 5, 70);
+        new_epoch = a.Selection(2.0 / a.epoch->population.size() * 100, 5, 70);
 
         ++epoch;
 
@@ -86,6 +87,8 @@ void xor_demo()
 
         err /= inputs->size();
         std::cout << " Error: " << std::sqrt(err) << std::endl;
+
+        a.epoch = new_epoch;
     } while (err > eps * eps);
 }
 
