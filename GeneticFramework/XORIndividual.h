@@ -35,7 +35,7 @@ namespace ga
         {
             return [] (double self_err, double other_err)
             {
-                return std::make_pair(1 + (int)(100. / self_err), 1 + (int)(100. / other_err));
+                return std::make_pair(1 + (int)(1. / (1e-3 + self_err)), 1 + (int)(1. / (1e-3 + other_err)));
             };
         }
 
