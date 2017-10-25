@@ -1,4 +1,5 @@
 #include "ANNIndividual.h"
+#include "Util.h"
 
 //ga::pIIndividual ga::ANNIndividual::Clone()
 //{
