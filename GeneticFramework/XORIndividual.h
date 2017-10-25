@@ -5,6 +5,10 @@
 
 #include "ANNIndividual.h"
 
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+
 namespace ga
 {
 
@@ -33,9 +37,9 @@ namespace ga
             {
                 if (self_err < other_err)
                 {
-                    return std::make_pair(-(int)(100 * (other_err - self_err) * log10(self_err)), 0);
+                    return std::make_pair(1 + max(-(int)(100 * (other_err - self_err) * log10(self_err)), 0), 0);
                 }
-                return std::make_pair(0, -(int)(100 * (self_err - other_err) * log10(other_err)));
+                return std::make_pair(0, 1 + max(-(int)(100 * (self_err - other_err) * log10(other_err)), 0));
             };
         }
 
