@@ -54,7 +54,7 @@ namespace ga
         XORIndividual(std::shared_ptr < std::vector < std::vector < float > > > inputs,
                       std::shared_ptr < std::vector < std::vector < float > > > outputs,
                       spare_fn_t spare_fn)
-            : ANNIndividual({ 2, 10, 10, 1 }, NeuralNetwork::POSITIVE_SYGMOID)
+            : ANNIndividual({ 2, 10, 10, 1 }, 50)
             , inputs(inputs)
             , outputs(outputs)
             , spare_fn(spare_fn)
