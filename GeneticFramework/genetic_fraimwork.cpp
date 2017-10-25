@@ -62,7 +62,7 @@ void xor_demo()
         err = 0;
 
         a.epoch->EpochBattle();
-        a.Selection(20, 40, 40);
+        a.Selection(2 / a.epoch->population.size() * 100, 5, 70);
 
         ++epoch;
 
