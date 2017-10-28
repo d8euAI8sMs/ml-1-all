@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <functional>
 
 namespace ga
 {
@@ -95,5 +96,45 @@ namespace ga
         if (winner != tic_tac::Z) return winner;
 
         return tic_tac::Z;
+    }
+
+    using player_fn = std::function < bool (board &, tic_tac) >;
+
+    /**
+     *  Returns: winner
+     */
+    static inline tic_tac PlayTTT(board & b,
+                                  tic_tac start_from,
+                                  const player_fn & x,
+                                  const player_fn & o)
+    {
+        tic_tac current_player = start_from;
+        tic_tac winner;
+        bool can_continue;
+
+        do
+        {
+            b.cells[b.cells.size() - 1] = ToFloat(start_from);
+            if (current_player == tic_tac::X)
+            {
+                can_continue = x(b, current_player);
+                current_player = tic_tac::O;
+            }
+            else
+            {
+                can_continue = o(b, current_player);
+                current_player = tic_tac::X;
+            }
+            if (can_continue)
+            {
+                winner = GetTTTWinner(b);
+            }
+            else
+            {
+                winner = tic_tac::Z;
+            }
+        } while (can_continue && (winner == tic_tac::Z));
+
+        return winner;
     }
 }
