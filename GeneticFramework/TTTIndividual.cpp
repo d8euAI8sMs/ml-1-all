@@ -7,49 +7,15 @@ std::pair<int, int> ga::TTTIndividual::Spare(pIIndividual individual)
 {
     if (this == individual.get()) return { };
 
+    TTTIndividual & other = * (dynamic_cast < TTTIndividual * > (individual.get()));
+
     board b(this->n);
-
-    bool can_continue;
-
-    tic_tac current_player = tic_tac::O;
-    tic_tac winner;
 
     b.cells[rand() % b.cells.size()] = ToFloat(tic_tac::X);
 
-    do
-    {
-        b.cells[b.cells.size() - 1] = ToFloat(current_player);
-        can_continue = false;
-        float max_w = 0;
-        size_t max_i = 0;
-        tic_tac old;
-        for (size_t i = 0; i < n * n; ++i)
-        {
-            if (ToTicTac(b.cells[i]) != tic_tac::Z)
-            {
-                continue;
-            }
-            old = ToTicTac(b.cells[i]);
-            b.cells[i] = ToFloat(current_player);
-            float decision = std::abs
-            (
-                (current_player == tic_tac::X)
-                    ? MakeDecision(b.cells).front()
-                    : individual->MakeDecision(b.cells).front()
-            );
-            if (max_w < decision)
-            {
-                max_w = decision;
-                max_i = i;
-            }
-            b.cells[i] = ToFloat(old);
-            can_continue = true;
-        }
-        b.cells[max_i] = ToFloat(current_player);
-        current_player = ((current_player == tic_tac::X) ? tic_tac::O : tic_tac::X);
-    } while (can_continue && ((winner = GetTTTWinner(b)) == tic_tac::Z));
+    tic_tac winner = PlayTTT(b, tic_tac::O, this->player, other.player);
 
-    return (can_continue
+    return ((winner == tic_tac::Z)
                 ? std::make_pair(1, 1)
                 : ((winner == tic_tac::X)
                     ? std::make_pair(2, 1)
