@@ -50,6 +50,9 @@
     <ClInclude Include="Util.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="TTTIndividual.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
     <ClInclude Include="TTT.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>

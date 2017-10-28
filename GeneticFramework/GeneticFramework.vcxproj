@@ -96,6 +96,7 @@
     <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="IIndividual.h" />
     <ClInclude Include="TTT.h" />
+    <ClInclude Include="TTTIndividual.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="XORIndividual.h" />
   </ItemGroup>
