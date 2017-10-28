@@ -88,6 +88,7 @@
     <ClCompile Include="Epoch.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="genetic_fraimwork.cpp" />
+    <ClCompile Include="TTTIndividual.cpp" />
     <ClCompile Include="XORIndividual.cpp" />
   </ItemGroup>
   <ItemGroup>
