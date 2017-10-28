@@ -218,7 +218,29 @@ int main()
 {
 	cout << "Hello!" << endl;
 
-    xor_demo();
+    while (1)
+    {
+	    cout << "1 - XOR" << endl;
+	    cout << "2 - Tic-Tac Toe" << endl;
+	    cout << "0 - Exit" << endl;
+	    cout << endl;
+
+        int option; cin >> option;
+
+        switch (option)
+        {
+        case 0:
+            return 0;
+        case 1:
+            xor_demo();
+            break;
+        case 2:
+            ttt_demo();
+            break;
+        default:
+            break;
+        }
+    }
 
 	return 0;
 }
