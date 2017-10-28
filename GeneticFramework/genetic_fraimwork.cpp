@@ -26,13 +26,12 @@ std::ostream & operator << (std::ostream & out, std::vector < T > v)
 
 void print_ttt_board(ga::board b)
 {
-    size_t n = std::sqrt(b.size() - 1);
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < b.n; ++i)
     {
         cout << "| ";
-        for (size_t j = 0; j < n; ++j)
+        for (size_t j = 0; j < b.n; ++j)
         {
-            tic_tac ij = ToTicTac(b[i * n + j]);
+            tic_tac ij = ToTicTac(b.cells[i * b.n + j]);
             cout <<
             (
                 (ij == tic_tac::Z)

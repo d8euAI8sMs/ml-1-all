@@ -22,20 +22,30 @@ namespace ga
         return static_cast < tic_tac > (static_cast < int > (t));
     }
 
-    using board = std::vector < float > ;
+    struct board
+    {
+        std::vector < float > cells;
+        size_t n;
 
-    static inline tic_tac GetTTTWinner(const board & b, size_t n)
+        board(size_t n)
+            : cells(n * n + 1, ToFloat(tic_tac::Z))
+            , n(n)
+        {
+        }
+    };
+
+    static inline tic_tac GetTTTWinner(const board & b)
     {
         tic_tac winner;
 
         // rows
 
-        for (size_t i = 0; i < n; ++i)
+        for (size_t i = 0; i < b.n; ++i)
         {
-            winner = ToTicTac(b[i + n * 0]);
-            for (size_t j = 0; j < n; ++j)
+            winner = ToTicTac(b.cells[i + b.n * 0]);
+            for (size_t j = 0; j < b.n; ++j)
             {
-                if (winner != ToTicTac(b[i + n * j]))
+                if (winner != ToTicTac(b.cells[i + b.n * j]))
                 {
                     winner = tic_tac::Z;
                     break;
@@ -46,12 +56,12 @@ namespace ga
 
         // cols
 
-        for (size_t i = 0; i < n; ++i)
+        for (size_t i = 0; i < b.n; ++i)
         {
-            winner = ToTicTac(b[i * n + 0]);
-            for (size_t j = 0; j < n; ++j)
+            winner = ToTicTac(b.cells[i * b.n + 0]);
+            for (size_t j = 0; j < b.n; ++j)
             {
-                if (winner != ToTicTac(b[i * n + j]))
+                if (winner != ToTicTac(b.cells[i * b.n + j]))
                 {
                     winner = tic_tac::Z;
                     break;
@@ -62,10 +72,10 @@ namespace ga
 
         // diag
 
-        winner = ToTicTac(b[0]);
-        for (size_t i = 0; i < n; ++i)
+        winner = ToTicTac(b.cells[0]);
+        for (size_t i = 0; i < b.n; ++i)
         {
-            if (winner != ToTicTac(b[i * n + i]))
+            if (winner != ToTicTac(b.cells[i * b.n + i]))
             {
                 winner = tic_tac::Z;
                 break;
@@ -73,10 +83,10 @@ namespace ga
         }
         if (winner != tic_tac::Z) return winner;
 
-        winner = ToTicTac(b[n - 1]);
-        for (size_t i = 0; i < n; ++i)
+        winner = ToTicTac(b.cells[b.n - 1]);
+        for (size_t i = 0; i < b.n; ++i)
         {
-            if (winner != ToTicTac(b[i * n + (n - 1 - i)]))
+            if (winner != ToTicTac(b.cells[i * b.n + (b.n - 1 - i)]))
             {
                 winner = tic_tac::Z;
                 break;
