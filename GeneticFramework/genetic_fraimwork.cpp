@@ -2,6 +2,7 @@
 #include <string>
 #include "GeneticAlgorithm.h"
 #include "XORIndividual.h"
+#include "TTTIndividual.h"
 #include "Util.h"
 
 using  namespace std;
@@ -21,6 +22,29 @@ std::ostream & operator << (std::ostream & out, std::vector < T > v)
     }
     out << "}";
     return out;
+}
+
+void print_ttt_board(ga::board b)
+{
+    size_t n = std::sqrt(b.size() - 1);
+    for (size_t i = 0; i < n; ++i)
+    {
+        cout << "| ";
+        for (size_t j = 0; j < n; ++j)
+        {
+            tic_tac ij = ToTicTac(b[i * n + j]);
+            cout <<
+            (
+                (ij == tic_tac::Z)
+                ? " "
+                : ((ij == tic_tac::O)
+                    ? "O"
+                    : "X")
+            ) << " | ";
+        }
+        cout << std::endl;
+    }
+    cout << std::endl;
 }
 
 void xor_demo()
