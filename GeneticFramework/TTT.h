@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <functional>
+#include <algorithm>
 
 namespace ga
 {
@@ -136,5 +137,30 @@ namespace ga
         } while (can_continue && (winner == tic_tac::Z));
 
         return winner;
+    }
+
+    static inline bool RandomPlayer(board & b, tic_tac who)
+    {
+        std::vector < size_t > positions(b.n * b.n);
+        for (size_t i = 0; i < positions.size(); ++i) positions[i] = i;
+        for (;;)
+        {
+            std::random_shuffle(positions.begin(), positions.end());
+            bool can_continue = false;
+            for (size_t i = 0; i < b.n * b.n; ++i)
+            {
+                size_t j = positions[i];
+                can_continue |= (ToTicTac(b.cells[j]) == tic_tac::Z);
+                if (can_continue)
+                {
+                    b.cells[j] = ToFloat(who);
+                    return true;
+                }
+            }
+            if (!can_continue)
+            {
+                return false;
+            }
+        }
     }
 }
