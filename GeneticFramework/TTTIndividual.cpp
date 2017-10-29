@@ -9,15 +9,30 @@ std::pair<int, int> ga::TTTIndividual::Spare(pIIndividual individual)
 
     TTTIndividual & other = * (dynamic_cast < TTTIndividual * > (individual.get()));
 
-    board b(this->n);
+    player_fn random_player = &RandomPlayer;
 
-    b.cells[rand() % b.cells.size()] = ToFloat(tic_tac::X);
+    size_t win = 0,     loose = 0,     draw = 0,
+           rnd_win = 0, rnd_loose = 0, rnd_draw = 0,
+           games;
 
-    tic_tac winner = PlayTTT(b, tic_tac::O, this->player, other.player);
+    games = this->n * this->n * 2;
 
-    return ((winner == tic_tac::Z)
-                ? std::make_pair(1, 1)
-                : ((winner == tic_tac::X)
-                    ? std::make_pair(2, 1)
-                    : std::make_pair(1, 2)));
+    for (size_t i = 0; i < games; ++i)
+    {
+        board b(this->n);
+
+        b.cells[rand() % (this->n * this->n)] = ToFloat(tic_tac::X);
+
+        tic_tac winner = PlayTTT(b, tic_tac::O, this->player, random_player);
+
+        if      (winner == tic_tac::Z) ++rnd_draw;
+        else if (winner == tic_tac::X) ++rnd_win;
+        else if (winner == tic_tac::O) ++rnd_loose;
+    }
+
+    return std::make_pair
+    (
+        - 1000 * log10(1e-8 + rnd_loose / (float) games),
+        0
+    );
 }
