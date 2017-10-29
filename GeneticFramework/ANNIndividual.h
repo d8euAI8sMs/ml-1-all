@@ -8,7 +8,7 @@ namespace ga
 
     class ANNIndividual
         : public IIndividual
-        , protected ANN::NeuralNetwork
+        , public ANN::NeuralNetwork
 	{
 
     private:
