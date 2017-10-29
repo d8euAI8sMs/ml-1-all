@@ -24,7 +24,7 @@ std::ostream & operator << (std::ostream & out, std::vector < T > v)
     return out;
 }
 
-void print_ttt_board(ga::board b)
+void print_ttt_board(const ga::board & b)
 {
     for (size_t i = 0; i < b.n; ++i)
     {
