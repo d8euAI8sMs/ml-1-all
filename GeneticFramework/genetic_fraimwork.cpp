@@ -171,14 +171,24 @@ void ttt_demo()
         board b(board_size);
         tic_tac winner;
 
+        b.cells[rand() % (b.n * b.n)] = ToFloat(tic_tac::X);
+
         print_ttt_board(b);
 
         player_fn user_player = [] (board & _b, tic_tac _who)
         {
+            bool can_continue = false;
+            for (size_t i = 0; i < _b.n * _b.n; ++i)
+            {
+                can_continue |= (ToTicTac(_b.cells[i]) == tic_tac::Z);
+            }
+            if (!can_continue) return false;
+
             size_t cell_i, cell_j;
             cin >> cell_i >> cell_j;
             _b.cells[(cell_i - 1) * _b.n + (cell_j - 1)] = ToFloat(_who);
             print_ttt_board(_b);
+
             return true;
         };
 
@@ -194,13 +204,13 @@ void ttt_demo()
             return false;
         };
 
-        winner = PlayTTT(b, tic_tac::X, user_player, other_player);
+        winner = PlayTTT(b, tic_tac::O, other_player, user_player);
 
-        if (winner == tic_tac::X)
+        if (winner == tic_tac::O)
         {
             std::cout << "You win!" << std::endl;
         }
-        else if (winner == tic_tac::O)
+        else if (winner == tic_tac::X)
         {
             std::cout << "You loose!" << std::endl;
         }
