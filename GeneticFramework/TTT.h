@@ -36,6 +36,52 @@ namespace ga
         }
     };
 
+    static inline std::vector < float > GetInvariant(board & b)
+    {
+        std::vector < float > r, t(b.n * b.n);
+        r = b.cells;
+
+        // apply reflections
+        for (size_t i = 0; i < b.n; ++i)
+        {
+            for (size_t j = 0; j < b.n; ++j)
+            {
+                t[i * b.n + j] += b.cells[i * b.n + (b.n - j - 1)]
+                                + b.cells[(b.n - i - 1) * b.n + j];
+            }
+        }
+
+        r = t;
+
+        // apply rotations
+        for (size_t i = 0; i < b.n; ++i)
+        {
+            for (size_t j = 0; j < b.n; ++j)
+            {
+                r[i * b.n + j] += t[j * b.n + (b.n - i - 1)]
+                                + t[(b.n - i - 1) * b.n + (b.n - j - 1)]
+                                + t[(b.n - j - 1) * b.n + i];
+                r[i * b.n + j] /= 6;
+            }
+        }
+
+        size_t m = (size_t) std::ceil(b.n / 2.0);
+
+        t.resize(m * m + 1);
+
+        for (size_t i = 0; i < m; ++i)
+        {
+            for (size_t j = 0; j < m; ++j)
+            {
+                t[i * m + j] = r[i * b.n + j];
+            }
+        }
+
+        t[m * m] = b.cells[b.n * b.n];
+
+        return t;
+    }
+
     static inline tic_tac GetTTTWinner(const board & b)
     {
         tic_tac winner;
