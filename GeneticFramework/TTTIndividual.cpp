@@ -15,7 +15,7 @@ std::pair<int, int> ga::TTTIndividual::Spare(pIIndividual individual)
            rnd_win = 0, rnd_loose = 0, rnd_draw = 0,
            games;
 
-    games = this->n * this->n * 2;
+    games = this->n * this->n * 30;
 
     for (size_t i = 0; i < games; ++i)
     {
