@@ -9,9 +9,9 @@ namespace ga
 
     enum class tic_tac : int
     {
-        X = -1,
-        O = 1,
-        Z = 0
+        X = 3,
+        O = 2,
+        Z = 1
     };
 
     static inline float ToFloat(tic_tac t)
