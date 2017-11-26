@@ -56,6 +56,12 @@ ga::pEpoch ga::GeneticAlgorithm::Selection(double unchange_perc, double mutation
                    , y = nullptr;
         if (elite)
         {
+            if (std::find(new_epoch->population.begin(),
+                          new_epoch->population.end(),
+                          std::make_pair(0, x)) != new_epoch->population.end())
+            {
+                continue;
+            }
             y = std::move(x);
             if (RandomBool(mutation_perc / 100)) y = y->Mutation();
             new_epoch->population.emplace_back(0, std::move(y));
