@@ -26,7 +26,7 @@ namespace ga
                 (int) (std::ceil(n / 2.0) * std::ceil(n / 2.0)) + 1,
                 (int) (std::ceil(n / 2.0) * std::ceil(n / 2.0)) * 2,
                 (int) (std::ceil(n / 2.0) * std::ceil(n / 2.0)) * 2,
-                1}, 4)
+                1}, 0.1)
             , n((size_t)n)
         {
             player = std::bind(&TTTIndividual::MakeStepOnBoard,
