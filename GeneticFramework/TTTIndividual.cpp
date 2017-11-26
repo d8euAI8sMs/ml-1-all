@@ -32,7 +32,7 @@ std::pair<int, int> ga::TTTIndividual::Spare(pIIndividual individual)
 
     return std::make_pair
     (
-        - 1000 * log10(1e-8 + rnd_loose / (float) games),
+        (int) ((games - rnd_loose) / (float) games * 1000),
         0
     );
 }
