@@ -5,7 +5,7 @@
 
 std::pair<int, int> ga::TTTIndividual::Spare(pIIndividual individual)
 {
-    if (this == individual.get()) return { };
+    if (this != individual.get()) return { };
 
     TTTIndividual & other = * (dynamic_cast < TTTIndividual * > (individual.get()));
 
