@@ -22,7 +22,11 @@ namespace ga
     public:
 
         TTTIndividual(int n)
-            : ANNIndividual({ n * n + 1, n * n * 2, n * n * 2, 1 }, 4)
+            : ANNIndividual({
+                (int) (std::ceil(n / 2.0) * std::ceil(n / 2.0)) + 1,
+                (int) (std::ceil(n / 2.0) * std::ceil(n / 2.0)) * 2,
+                (int) (std::ceil(n / 2.0) * std::ceil(n / 2.0)) * 2,
+                1}, 4)
             , n((size_t)n)
         {
             player = std::bind(&TTTIndividual::MakeStepOnBoard,
@@ -58,7 +62,8 @@ namespace ga
                 }
                 old = ToTicTac(b.cells[i]);
                 b.cells[i] = ToFloat(play_as);
-                float decision = MakeDecision(b.cells).front();
+                auto inv = GetInvariant(b);
+                float decision = MakeDecision(inv).front();
                 if (max_w < decision)
                 {
                     max_w = decision;
