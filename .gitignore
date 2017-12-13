@@ -1,0 +1,8 @@
+Debug
+/*.sdf
+/*.suo
+/*.opensdf
+Release
+Data
+tinyxml
+opencv300
